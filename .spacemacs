@@ -38,6 +38,7 @@ values."
      html
      javascript
      deft
+     journal
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -361,6 +362,43 @@ you should place your code here."
  '((python     . t)
    (js . t)
    (ruby       . t)))
+
+
+(setq org-log-done t)
+
+;;This way if a file is changed in one machine, it will be updated automatically
+;;in any other emacs running. This will avoid conflicts.
+(global-auto-revert-mode t)
+
+;;(require 'openwith)
+;;(openwith-mode t)
+;;(setq openwith-associations '(("\\.mp4\\'" "vlc" (file))))
+
+
+;;plantuml
+(setq plantuml-jar-path "/home/pawel/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+(setq plantuml-output-type "png")
+
+(with-eval-after-load 'flycheck
+(require 'flycheck-plantuml)
+(flycheck-plantuml-setup))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
+
+(setq deft-directory "~/Dropbox/mynotes")
+(setq deft-extensions '("org" "md" "txt"))
+
+;;there is a software installed into .emacs/private/journal
+(setq org-journal-dir "/home/pawel/Dropbox/journal")
+
+(setq org-agenda-files '("/home/pawe/Dropbox/journal"))
+ 
+
+
 
 
 
