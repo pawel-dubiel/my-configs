@@ -31,14 +31,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     go
-     yaml
-     elixir
-     markdown
-     html
-     javascript
-     deft
-     journal
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -48,9 +40,11 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
-     ;; git
-     ;; markdown
-     ;; org
+     git
+     markdown
+     org
+     deft
+     org-roam
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -326,79 +320,23 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(deft-auto-save-interval 0)
+ '(deft-default-extension "org")
+ '(deft-directory "~/Dropbox/orgfiles/mynotes")
+ '(deft-extensions (quote ("org" "md" "txt")) t)
+ '(deft-use-filename-as-title t t)
+ '(deft-use-filter-string-for-filename t t)
+ '(org-agenda-files
+   (quote
+    ("~/Dropbox/orgfiles" "~/Dropbox/orgfiles/mynotes" "~/Dropbox/orgfiles/other")))
  '(package-selected-packages
    (quote
-    (deft markdown-mode+ go-guru go-eldoc go-mode yaml-mode ob-elixir flycheck-mix flycheck-credo flycheck alchemist company elixir-mode mmm-mode markdown-toc markdown-mode gh-md web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (org-journal smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md evil-magit magit git-commit with-editor transient deft ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
-
-
-(setq org-capture-templates
-'(("a" "Appointment" entry (file  "~/Dropbox/orgfiles/gcal.org" "Appointments")
-"* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-("n" "Note" entry (file+headline "~/Dropbox/orgfiles/notes.org" "Notes")
-"* Note %?\n%T")
-("l" "Link" entry (file+headline "~/Dropbox/orgfiles/links.org" "Links")
-"* %? %^L %^g \n%T" :prepend t)
-("b" "Blog idea" entry (file+headline "~/Dropbox/orgfiles/i.org" "Blog Topics:")
-"* %?\n%T" :prepend t)
-("t" "To Do Item" entry (file+headline "~/Dropbox/orgfiles/i.org" "To Do Items")
-"* %?\n%T" :prepend t)
-("j" "Journal" entry (file+datetree "~/Dropbox/journal.org")
-"* %?\nEntered on %U\n  %i\n  %a")
-("s" "Screencast" entry (file "~/Dropbox/orgfiles/screencastnotes.org")
-"* %?\n%i\n")))
-
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python     . t)
-   (js . t)
-   (ruby       . t)))
-
-
-(setq org-log-done t)
-
-;;This way if a file is changed in one machine, it will be updated automatically
-;;in any other emacs running. This will avoid conflicts.
-(global-auto-revert-mode t)
-
-;;(require 'openwith)
-;;(openwith-mode t)
-;;(setq openwith-associations '(("\\.mp4\\'" "vlc" (file))))
-
-
-;;plantuml
-(setq plantuml-jar-path "/home/pawel/plantuml.jar")
-(setq plantuml-default-exec-mode 'jar)
-(setq plantuml-output-type "png")
-
-(with-eval-after-load 'flycheck
-(require 'flycheck-plantuml)
-(flycheck-plantuml-setup))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)))
-
-
-(setq deft-directory "~/Dropbox/mynotes")
-(setq deft-extensions '("org" "md" "txt"))
-
-;;there is a software installed into .emacs/private/journal
-(setq org-journal-dir "/home/pawel/Dropbox/journal")
-
-(setq org-agenda-files '("/home/pawe/Dropbox/journal"))
- 
-
-
-
-
-
+~
